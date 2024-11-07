@@ -1,7 +1,7 @@
 const lcs = function lcs(seq1, seq2) {
   "use strict";
-  let arr1 = [...seq1??[]];
-  let arr2 = [...seq2??[]];
+  let arr1 = seq1||[];
+  let arr2 = seq2||[];
   if (arr2.length > arr1.length) {
     [arr1, arr2] = [arr2, arr1];
   }
