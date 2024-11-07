@@ -27,7 +27,7 @@ function isNullish(x){
   return x == null;
 }
 
-function fuzzyproperty(obj, prop){
+function fuzzProp(obj, prop){
   if(isNullish(obj)){
     return null;
   }
@@ -68,3 +68,10 @@ function fuzzyproperty(obj, prop){
     }
   }
 }
+
+
+let obj={
+  'cheeses':7
+};
+
+console.log(fuzzProp(obj,'cheese'));
