@@ -74,4 +74,4 @@ let obj={
   'cheeses':7
 };
 
-console.log(fuzzProp(obj,'cheese'));
+console.log(fuzzProp(obj,'cheesey'));
