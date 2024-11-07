@@ -1,7 +1,7 @@
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-
-
+if (!globalThis.window) {
+  globalThis.jsdom = require("jsdom");
+  globalThis.JSDOM = jsdom.JSDOM;
+}
 
 function isBlank(key) {
   return /^(|undefined|null)$/.test(String(key).trim());
@@ -17,10 +17,16 @@ function jsonToHtml(json) {
     .replaceAll("}", "</curly>")
     .replaceAll("[", "<square>")
     .replaceAll("]", "</square>");
-  const dom = new JSDOM(`<json>${jsml}</json>`);
-  const window = dom.window;
-  const document = window.document;
-  const jsonDom = document.querySelector("json");
+  if (!globalThis.window) {
+    const dom = new JSDOM(`<json>${jsml}</json>`);
+    const window = dom.window;
+    const document = window.document;
+    const jsonDom = document.querySelector("json");
+    jsonDom.innerHTML = `<curly>${jsonDom.innerHTML}</curly>`;
+    return jsonDom;
+  }
+  const jsonDom = document.createElement("json");
+  jsonDom.innerHTML = jsml;
   jsonDom.innerHTML = `<curly>${jsonDom.innerHTML}</curly>`;
   return jsonDom;
 }
@@ -230,9 +236,9 @@ function deepenJSON(json) {
 }
 
 function JSONEval(jsonstring, deepen = 1) {
-  try{
+  try {
     return JSON.parse(jsonstring);
-  }catch{
+  } catch {
     let json = jsonRecover(jsonstring);
     deepen = Math.min(Math.max(deepen, 0) || 0, 100) || 0;
     for (let i = 0; i !== deepen; i++) {
@@ -242,13 +248,8 @@ function JSONEval(jsonstring, deepen = 1) {
   }
 }
 
-
-
-
 function JSONPrettier(obj) {
   return JSON.stringify(obj, null, 2);
 }
-
-
 
 console.log(JSONPrettier(JSONEval(jsonString)));
