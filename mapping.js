@@ -1,26 +1,23 @@
-function errMap(arr, ...args) {
+function errMap(arr, mapper, ...args) {
   arr = [...arr];
-  const arr_length = arr.length;
-  for (let i = 0; i !== arr_length; i++) {
+  return arr.map((item, index, array) => {
     try {
-      arr[i] = [arr[i]].map(...args);
+      return mapper(item, index, array, ...args);
     } catch (e) {
-      arr[i] = e;
+      return e;
     }
-  }
-  return arr;
+  });
 }
 
-function tryMap(arr, ...args) {
+function tryMap(arr, mapper, ...args) {
   arr = [...arr];
-  const arr_length = arr.length;
-  for (let i = 0; i !== arr_length; i++) {
+  return arr.map((item, index, array) => {
     try {
-      arr[i] = [arr[i]].map(...args);
+      return mapper(item, index, array, ...args);
     } catch {
-      continue;
+      return item;
     }
-  }
-  return arr;
+  });
 }
+
 
