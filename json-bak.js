@@ -1,5 +1,5 @@
 function backLink(x){
-  const track = []
+  const track = [];
   let warn = true;
   function bak(obj){
     for(const key in obj){
