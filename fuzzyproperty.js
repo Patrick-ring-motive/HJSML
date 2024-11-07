@@ -52,4 +52,19 @@ function fuzzyproperty(obj, prop){
       return obj[key];
     }
   }
+  for(const key in obj){
+    if(wordMatch(key.toLowerCase(),lowProp) && !isNullish(obj[key])){
+      return obj[key];
+    }
+  }
+  for(const key of names){
+    if(wordMatch(key.toLowerCase(),lowProp) && !isNullish(obj[key])){
+      return obj[key];
+    }
+  }
+  for(const key of syms){
+    if(wordMatch(String(key.description).toLowerCase(),lowProp) && !isNullish(obj[key])){
+      return obj[key];
+    }
+  }
 }
