@@ -16,7 +16,9 @@ function jsonToHtml(json) {
     .replaceAll("{", "<curly>")
     .replaceAll("}", "</curly>")
     .replaceAll("[", "<square>")
-    .replaceAll("]", "</square>");
+    .replaceAll("]", "</square>")
+  .replaceAll("(", "<square>")
+  .replaceAll(")", "</square>");
   if (!globalThis.window) {
     const dom = new JSDOM(`<json>${jsml}</json>`);
     const window = dom.window;
@@ -235,6 +237,32 @@ function deepenJSON(json) {
   return json;
 }
 
+function lightenJSON(ljson){
+  const track = [];
+  function lighten(json){
+  
+  for (const key in json){
+    if(json[key].length === 2 && isString(json[key][0])){
+      const obj = {};
+      obj[json[key][0]] = json[key][1];
+      json[key] = obj;
+    }
+    if(json[key].length === 1){
+      json[key] = json[key][0];
+    }
+    if(track.includes(json[key])){
+      continue;
+    }
+    track.push(json[key]);
+    lighten(json[key]);
+  }
+  }
+  
+  lighten(ljson);
+  return ljson;
+}
+
+
 function JSONEval(jsonstring, deepen = 1) {
   try {
     return JSON.parse(jsonstring);
@@ -244,7 +272,7 @@ function JSONEval(jsonstring, deepen = 1) {
     for (let i = 0; i !== deepen; i++) {
       json = deepenJSON(json);
     }
-    return json;
+    return lightenJSON(json);
   }
 }
 
@@ -252,4 +280,4 @@ function JSONPrettier(obj) {
   return JSON.stringify(obj, null, 2);
 }
 
-console.log(JSONPrettier(JSONEval(jsonString)));
+console.log(JSONPrettier(JSONEval(require('util').inspect(Array))));

@@ -28,4 +28,4 @@ let test = {
   arr: ["a", "b"],
 };
 
-console.log(HTMLify(test));
+console.log(HTMLify(require('util').inspect(process)));
