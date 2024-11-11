@@ -22,10 +22,3 @@ function HTMLify(obj) {
 
   return json;
 }
-
-let test = {
-  key: "value",
-  arr: ["a", "b"],
-};
-
-console.log(HTMLify(require('util').inspect(process)));
