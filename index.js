@@ -1,5 +1,25 @@
-if (!globalThis.window) {
-  globalThis.jsdom = require("jsdom");
+if (!globalThis.window && !globalThis.JSDOM) {
+  if (globalThis.XMLHttpRequest) {
+    let request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      "https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js",
+      false,
+    );
+    request.send(null);
+    eval?.(request.responseText);
+    request = new XMLHttpRequest();
+    request.responseType = "arraybuffer";
+    request.open(
+      "GET",
+      "https://raw.githubusercontent.com/Patrick-ring-motive/jsdom-bundle/refs/heads/main/bundles/kid-index.js.gz",
+      false,
+    );
+    request.send(null);
+    eval?.(pako.inflate(request.response, { to: "string" }));
+  } else {
+    globalThis.jsdom = require("jsdom");
+  }
   globalThis.JSDOM = jsdom.JSDOM;
 }
 
@@ -46,7 +66,7 @@ let json = `{
   "name":"nodejs",
   "version":"1.0.0
   `;
-const jsonString = `{ "data": [ { "request": "Retrieve the URL and content for training an LLM with instruct/answer model from the USAA informational website.", "response": "URL: https://usaaef.org/news-insights/save-for-emergencies\nContent: ['by Steve Georgoulakis, CFP® on Tuesday January 16, 2024Posted in Category: Saving, Wallet Workouts\nDoes your wallet need a spot?\nAn emergency fund is the key to getting through tough times.\nThis week&#8217;s workout:\nSave for Emergencies\nBe ready when things go sideways. From car repairs to a broken cell phone, we all face unexpected expenses and financial emergencies.\nHow do you push through? Simple: have a little money set aside.\nAn emergency fund gives you the financial strength to adapt and overcome adversity.\n&nbsp;\nExercise 1\nWarm up with at least $1,000 in your emergency fund and keep saving until you have 3 to 6 months&#8217; worth of living expenses.\nExercise 2\nKeep your emergency fund in a safe and accessible account that is separate from your everyday checking account.\nExercise 3\nStrengthen your emergency fund with an automatic deposit or by selling unused items.\n&nbsp;\nExercise 4\nMix up your savings workout routine by trying these great tips for building an emergency fund.\n&nbsp;\n&nbsp;\n&nbsp;\n&nbsp;\nJoin us for 7 Wallet Workouts\nACHIEVE FINANCIAL FITNESS LIKE NEVER BEFORE!\nJan. 3 Have a Financial Game Plan\nJan. 10 Spend Less than You Earn\nJan. 17 Save for Emergencies\nJan. 24 Use Debt Responsibly\nJan. 31 Protect Your Life, Loved Ones &amp; Possessions\nFeb. 7 Save and Invest for Your Future\nFeb. 14 Rest &amp; Recovery\nFeb. 21 Prepare Your Legal Documents\nDownload PDF\nThe USAA Educational Foundation is a nonprofit, tax-exempt IRS 501(c)(3) and cannot endorse or promote any commercial supplier, product, or service. The content of this blog is intended for information purposes only and does not constitute legal, tax, or financial advice.' } ] } `;
+
 
 function jsonRecover(jsonString) {
   let j = jsonToHtml(
@@ -312,9 +332,10 @@ function JSONEval(jsonstring, deepen = 1) {
 function JSONPrettier(obj) {
   return JSON.stringify(obj, null, 2);
 }
-let h = new Map();
+/*let h = new Map();
 h.set("Content-Type", "application/json");
 console.log(
   require("util").inspect(h),
   JSONPrettier(JSONEval(require("util").inspect(process))),
 );
+*/
