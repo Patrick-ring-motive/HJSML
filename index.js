@@ -338,7 +338,7 @@ function JSONEval(jsonstring, deepen = 1) {
     for (let i = 0; i !== deepen; i++) {
       json = deepenJSON(json);
     }
-    return lightenJSON(json);
+    return JSON.parse(JSON.stringify(lightenJSON(json)).replace(/SQUARE([\d]+)/g,'array$1'));
   }
 }
 
