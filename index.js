@@ -209,6 +209,10 @@ function isString(str) {
   return typeof str === "string" || str instanceof String;
 }
 
+function isObject(x){
+  return typeof x ==='object' && ! x === null;
+}
+
 function deepenJSON(json) {
   for (const key in json) {
     if (json[key] instanceof Array) {
@@ -261,7 +265,7 @@ function deepenJSON(json) {
         json[key] = deepenJSON(json[key]);
       }
     }
-    if (typeof json[key] === "object") {
+    if (isObject(json[key])) {
       try{
         Object.defineProperty(json,key,{
           value:deepenJSON(json[key]),
@@ -291,7 +295,7 @@ function lightenJSON(ljson) {
         if (json[key].length === 1) {
           json[key] = json[key][0];
         }
-      } else if (typeof json[key] === "object") {
+      } else if (isObject("object")) {
         const test = Object.entries(json[key]);
         if (test.length === 1 && /^SQUARE[0-9]+$/.test(test[0][0])) {
           json[key] = test[0][1];
