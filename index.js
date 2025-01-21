@@ -262,7 +262,16 @@ function deepenJSON(json) {
       }
     }
     if (typeof json[key] === "object") {
-      json[key] = deepenJSON(json[key]);
+      try{
+        Object.defineProperty(json,key,{
+          value:deepenJSON(json[key]),
+          configurable:true,
+          enumerable:true,
+          writeable:true
+        });
+      }catch(e){
+        console.log(e,...arguments);
+      }
     }
   }
   return json;
