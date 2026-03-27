@@ -20,6 +20,6 @@ function tryMap(arr, mapper, ...args) {
   });
 }
 
-function objoin(obj={},delim1=',',delim2=delim1){
-   return Object.entries(obj).map(x=>x.join(delim1)).join(delim2);
+function objoin(obj = {}, delim1 = ',', delim2 = delim1) {
+  return Object.entries(obj).map(x => x.join(delim1)).join(delim2);
 }

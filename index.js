@@ -16,7 +16,9 @@ if (!globalThis.window && !globalThis.JSDOM) {
       false,
     );
     request.send(null);
-    eval?.(pako.inflate(request.response, { to: "string" }));
+    eval?.(pako.inflate(request.response, {
+      to: "string"
+    }));
   } else {
     globalThis.jsdom = require("jsdom");
   }
@@ -67,19 +69,18 @@ let json = `{
   "version":"1.0.0
   `;
 
-
 function jsonRecover(jsonString) {
   let j = jsonToHtml(
     jsonString
-      .replace(/[:]+/g, ":")
-      .replace(/[=]+/g, "=")
-      .replaceAll("=>", "=")
-      .replaceAll(">=", "=")
-      .replaceAll("<=", "=")
-      .replaceAll("+=", "=")
-      .replaceAll("-=", "=")
-      .replaceAll(":=", "=")
-      .replaceAll("->", "="),
+    .replace(/[:]+/g, ":")
+    .replace(/[=]+/g, "=")
+    .replaceAll("=>", "=")
+    .replaceAll(">=", "=")
+    .replaceAll("<=", "=")
+    .replaceAll("+=", "=")
+    .replaceAll("-=", "=")
+    .replaceAll(":=", "=")
+    .replaceAll("->", "="),
   );
   let curls = [...j.querySelectorAll("curly")];
   for (let i = 0; i < curls.length; i++) {
@@ -102,7 +103,10 @@ function jsonRecover(jsonString) {
             .trim()
             .replace(/^["'\s:]*/g, "")
             .replace(/["'\s:]*$/g, "");
-          vals[y] = { key: key, value: value };
+          vals[y] = {
+            key: key,
+            value: value
+          };
         }
         childNodes[x] = vals.filter(
           (x) => !(isBlank(x?.key) && isBlank(x?.value)),
@@ -178,6 +182,7 @@ function jsonRecover(jsonString) {
   }
   let tally = [];
   const root = j.firstElementChild;
+
   function traverse(node) {
     if (tally.includes(node)) {
       return;
@@ -209,8 +214,8 @@ function isString(str) {
   return typeof str === "string" || str instanceof String;
 }
 
-function isObject(x){
-  return typeof x ==='object' && ! x === null;
+function isObject(x) {
+  return typeof x === 'object' && !x === null;
 }
 
 function deepenJSON(json) {
@@ -266,15 +271,15 @@ function deepenJSON(json) {
       }
     }
     if (isObject(json[key])) {
-      try{
-        Object.defineProperty(json,key,{
-          value:deepenJSON(json[key]),
-          configurable:true,
-          enumerable:true,
-          writeable:true
+      try {
+        Object.defineProperty(json, key, {
+          value: deepenJSON(json[key]),
+          configurable: true,
+          enumerable: true,
+          writeable: true
         });
-      }catch(e){
-        console.log(e,...arguments);
+      } catch (e) {
+        console.log(e, ...arguments);
       }
     }
   }
@@ -283,6 +288,7 @@ function deepenJSON(json) {
 
 function lightenJSON(ljson) {
   const track = [];
+
   function lighten(json) {
     let last = null;
     for (let key in json) {
@@ -338,7 +344,7 @@ function JSONEval(jsonstring, deepen = 1) {
     for (let i = 0; i !== deepen; i++) {
       json = deepenJSON(json);
     }
-    return JSON.parse(JSON.stringify(lightenJSON(json)).replace(/SQUARE([\d]+)/g,'array$1'));
+    return JSON.parse(JSON.stringify(lightenJSON(json)).replace(/SQUARE([\d]+)/g, 'array$1'));
   }
 }
 

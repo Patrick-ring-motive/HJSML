@@ -1,7 +1,7 @@
 const lcs = function lcs(seq1, seq2) {
   "use strict";
-  let arr1 = seq1||[];
-  let arr2 = seq2||[];
+  let arr1 = seq1 || [];
+  let arr2 = seq2 || [];
   if (arr2.length > arr1.length) {
     [arr1, arr2] = [arr2, arr1];
   }
@@ -23,55 +23,54 @@ const wordMatch = function wordMatch(str1, str2) {
   return lcs(str1, str2) >= Math.floor(0.8 * Math.max(str1?.length ?? 0, str2?.length ?? 0));
 }
 
-function isNullish(x){
+function isNullish(x) {
   return x == null;
 }
 
-function fuzzProp(obj, prop){
-  if(isNullish(obj)){
+function fuzzProp(obj, prop) {
+  if (isNullish(obj)) {
     return null;
   }
-  if(!isNullish(obj[prop])){
+  if (!isNullish(obj[prop])) {
     return obj.prop;
   }
   const lowProp = prop.toLowerCase();
-  for(const key in obj){
-    if((key.toLowerCase() == lowProp) && !isNullish(obj[key])){
+  for (const key in obj) {
+    if ((key.toLowerCase() == lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
   const names = Object.getOwnPropertyNames(obj);
-  for(const key of names){
-    if((key.toLowerCase() == lowProp) && !isNullish(obj[key])){
+  for (const key of names) {
+    if ((key.toLowerCase() == lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
   const syms = Object.getOwnPropertySymbols(obj);
-  for(const key of syms){
-    if((String(key.description).toLowerCase() == lowProp) && !isNullish(obj[key])){
+  for (const key of syms) {
+    if ((String(key.description).toLowerCase() == lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
-  for(const key in obj){
-    if(wordMatch(key.toLowerCase(),lowProp) && !isNullish(obj[key])){
+  for (const key in obj) {
+    if (wordMatch(key.toLowerCase(), lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
-  for(const key of names){
-    if(wordMatch(key.toLowerCase(),lowProp) && !isNullish(obj[key])){
+  for (const key of names) {
+    if (wordMatch(key.toLowerCase(), lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
-  for(const key of syms){
-    if(wordMatch(String(key.description).toLowerCase(),lowProp) && !isNullish(obj[key])){
+  for (const key of syms) {
+    if (wordMatch(String(key.description).toLowerCase(), lowProp) && !isNullish(obj[key])) {
       return obj[key];
     }
   }
 }
 
-
-let obj={
-  'cheeses':7
+let obj = {
+  'cheeses': 7
 };
 
-console.log(fuzzProp(obj,'cheesey'));
+console.log(fuzzProp(obj, 'cheesey'));
